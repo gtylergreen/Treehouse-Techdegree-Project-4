@@ -8,7 +8,7 @@ class Phrase {
    */
   addPhraseToDisplay() {
     let phraseList = document.getElementById('phrase');
-    let splitPhrase = randomPhrase.phrase.split('');
+    let splitPhrase = this.phrase.split('');
     console.log(splitPhrase.length);
     for (let i = 0; i < splitPhrase.length; i++) {
       let currentElement = document.createElement('li');

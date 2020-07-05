@@ -39,11 +39,13 @@ class Game {
   /**
    * Begins game by selecting a random phrase and displaying it to user
    */
-  //   startGame() {
-  //     //debugger;
-  //     document.getElementById('overlay').style.display = 'none';
-  //     this.activePhrase = this.getRandomPhrase;
-  //     console.log(this.activePhrase);
-  //     activePhrase.addPhraseToDisplay;
-  //   }
+  startGame() {
+    //debugger;
+    document.getElementById('overlay').style.display = 'none';
+    this.activePhrase = this.getRandomPhrase();
+    console.log(this.activePhrase);
+    // debugger;
+    //console.log(this.phrase.phrase);
+    this.activePhrase.addPhraseToDisplay();
+  }
 }
