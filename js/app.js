@@ -12,3 +12,10 @@ document.getElementById('qwerty').addEventListener('click', (e) => {
     game.handleInteraction(e);
   }
 });
+
+document.addEventListener('keyup', (e) => {
+  if (e.keyCode >= 65 && e.keyCode <= 90) {
+    console.log(String.fromCharCode(e.keyCode).toLowerCase());
+    game.handleInteraction(e);
+  }
+});

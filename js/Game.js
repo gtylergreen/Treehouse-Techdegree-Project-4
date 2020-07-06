@@ -54,9 +54,26 @@ class Game {
    * Handles any interaction in the game.
    */
   handleInteraction(e) {
-    const currentEventValue = e.target.textContent;
-    e.target.disabled = true;
-    e.target.classList.add('chosen');
+    let currentEventValue = '';
+    if (e.keyCode >= 65 && e.keyCode <= 90) {
+      currentEventValue = String.fromCharCode(e.keyCode).toLowerCase();
+      const allKeys = document.getElementsByClassName('key');
+      console.log(allKeys);
+      for (let i = 0; i < allKeys.length; i++) {
+        if (allKeys[i].textContent === currentEventValue) {
+          console.log(allKeys[i]);
+
+          allKeys[i].disabled = true;
+          allKeys[i].classList.add('chosen');
+        }
+      }
+    } else {
+      currentEventValue = e.target.textContent;
+      console.log(currentEventValue);
+      e.target.disabled = true;
+      e.target.classList.add('chosen');
+    }
+
     // console.log(currentEventValue);
     if (this.activePhrase.checkLetter(currentEventValue)) {
       this.activePhrase.showMatchedLetter(currentEventValue);
@@ -166,6 +183,7 @@ won
     let lives = document.getElementById('scoreboard').firstElementChild
       .children;
     for (let i = 0; i < lives.length; i++) {
+      lives[i].classList.add('tries');
       lives[i].innerHTML =
         '<img src="images/liveHeart.png" alt="Heart Icon" height="35" width="30">';
     }
