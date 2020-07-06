@@ -28,15 +28,19 @@ class Phrase {
    * Checks if passed letter is in phrase
    * @param (string) letter - Letter to check
    */
-  checkLetter(eventLetter) {
+  checkLetter(value) {
+    // const eventLetter = e.target.textContent;
     console.log(game.activePhrase.phrase);
-    console.log(eventLetter);
-    if (game.activePhrase.phrase.includes(eventLetter)) {
-      this.showMatchedLetter(eventLetter);
+    if (game.activePhrase.phrase.includes(value)) {
+      return true;
     } else {
-      game.removeLife();
+      return false;
     }
-    game.checkForWin();
+    //   this.showMatchedLetter(value);
+    // } else {
+    //   game.removeLife();
+    // }
+    // game.checkForWin();
   }
 
   /**

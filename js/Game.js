@@ -55,10 +55,17 @@ class Game {
    */
   handleInteraction(e) {
     const currentEventValue = e.target.textContent;
-    // console.log(currentEventValue);
-    this.activePhrase.checkLetter(currentEventValue);
     e.target.disabled = true;
     e.target.classList.add('chosen');
+    // console.log(currentEventValue);
+    if (this.activePhrase.checkLetter(currentEventValue)) {
+      this.activePhrase.showMatchedLetter(currentEventValue);
+      if (this.checkForWin()) {
+        this.gameOver('win');
+      }
+    } else if (!this.activePhrase.checkLetter(currentEventValue)) {
+      this.removeLife();
+    }
   }
 
   /**
@@ -88,6 +95,8 @@ won
 
   removeLife() {
     //debugger;
+    this.missed += 1;
+    console.log(this.missed);
     let livesRemaining = document.getElementById('scoreboard').firstElementChild
       .children;
     let currentLives = [];
@@ -105,7 +114,7 @@ won
       currentLives.shift();
     }
 
-    if (currentLives.length === 0) {
+    if (this.missed === 5) {
       this.gameOver('lose');
     }
   }
@@ -117,16 +126,48 @@ won
   gameOver(result) {
     const gameOverBackground = document.getElementById('overlay');
     const gameOverMessage = document.getElementById('game-over-message');
-
     if (result === 'win') {
       gameOverMessage.textContent = 'Congratulations! You Win!';
       gameOverBackground.classList.add('win');
       gameOverBackground.style.display = 'block';
+
       console.log('You Win!');
     } else if (result == 'lose') {
       gameOverMessage.textContent = 'Sorry. You Lose.';
       gameOverBackground.classList.add('lose');
       gameOverBackground.style.display = 'block';
+    }
+    this.refreshGameBoard();
+  }
+  refreshGameBoard() {
+    const phraseDiv = document.getElementById('phrase').firstElementChild;
+    const ulItems = phraseDiv.childNodes;
+
+    while (phraseDiv.firstChild) {
+      phraseDiv.removeChild(phraseDiv.firstChild);
+    }
+    const rows = document.getElementById('qwerty').firstElementChild;
+    const firstRow = rows.children;
+    //debugger;
+    for (let i = 0; i < firstRow.length; i++) {
+      firstRow[i].classList.remove('chosen');
+      firstRow[i].removeAttribute('disabled');
+    }
+    const secondRow = rows.nextElementSibling.children;
+    for (let i = 0; i < secondRow.length; i++) {
+      secondRow[i].classList.remove('chosen');
+      secondRow[i].removeAttribute('disabled');
+    }
+    const thirdRow = rows.nextElementSibling.nextElementSibling.children;
+    for (let i = 0; i < thirdRow.length; i++) {
+      thirdRow[i].classList.remove('chosen');
+      thirdRow[i].removeAttribute('disabled');
+    }
+    let lives = document.getElementById('scoreboard').firstElementChild
+      .children;
+    for (let i = 0; i < lives.length; i++) {
+      lives[i].innerHTML =
+        '<img src="images/liveHeart.png" alt="Heart Icon" height="35" width="30">';
     }
   }
 }
