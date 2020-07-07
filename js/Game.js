@@ -1,3 +1,4 @@
+//Game class with contructor to the specified criteria.
 class Game {
   constructor() {
     this.missed = 0;
@@ -9,7 +10,6 @@ class Game {
    * Creates phrases for use in game
    * @return {array} An array of phrases that could be used in the game
    */
-
   createPhrases() {
     const startPhrases = [
       { phrase: 'A Chip on Your Shoulder' },
@@ -19,12 +19,13 @@ class Game {
       { phrase: 'Beating Around the Bush' },
     ];
     let phrases = [];
+    //Loops through the phrases array and creates a new Phrase class for each of the phrases.
     for (let i = 0; i < startPhrases.length; i++) {
       let lowerCasePhrase = startPhrases[i].phrase.toLowerCase();
       let currentPhrase = new Phrase(lowerCasePhrase);
       phrases.push(currentPhrase);
     }
-    console.log(phrases);
+    //Returns the array of phrase objects.
     return phrases;
   }
 
@@ -32,11 +33,9 @@ class Game {
    * Selects random phrase from phrases property
    * @return {Object} Phrase object chosen to be used
    */
-
   getRandomPhrase() {
     const randomNumber = Math.floor(Math.random() * Math.floor(5));
     let randomPhrase = this.phrases[randomNumber];
-    console.log(randomPhrase);
     return randomPhrase;
   }
 
@@ -44,7 +43,16 @@ class Game {
    * Begins game by selecting a random phrase and displaying it to user
    */
   startGame() {
+    //   Removes the start game screen and had to change the display style of the hearts
+    //   since I wanted to add a pulsing effect. I needed to show and hide them to keep
+    //   them from appearing on the homescreen.
     document.getElementById('overlay').style.display = 'none';
+    const hearts = document.querySelectorAll('.tries');
+    console.log(hearts);
+    for (let i = 0; i < hearts.length; i++) {
+      hearts[i].style.display = 'inline-block';
+    }
+    //Calls the getRandomPhraseMethod and sets it to the active phrase and displays the placeholders for the phrase.
     this.activePhrase = this.getRandomPhrase();
     console.log(this.activePhrase);
     this.activePhrase.addPhraseToDisplay();
@@ -53,6 +61,11 @@ class Game {
   /**
    * Handles any interaction in the game.
    */
+
+  //Takes in an event, determines whether it was a keyup or click event and applies logic to determine
+  //whether it is one of the letters. If it is, calls show matched letter, the calls the check for win
+  //method. If that returns true, calls gameover passing in win. If letter isn't in the phrase, calls
+  //the removeLife method to remove a life.
   handleInteraction(e) {
     let currentEventValue = '';
     if (e.keyCode >= 65 && e.keyCode <= 90) {
@@ -74,7 +87,6 @@ class Game {
       e.target.classList.add('chosen');
     }
 
-    // console.log(currentEventValue);
     if (this.activePhrase.checkLetter(currentEventValue)) {
       this.activePhrase.showMatchedLetter(currentEventValue);
       if (this.checkForWin()) {
@@ -90,6 +102,8 @@ class Game {
 * @return {boolean} True if game has been won, false if game wasn't
 won
 */
+  //Checks to see if there are any letters remaining that have the classes hide and letter. If there
+  //aren't any, calls the gameOver methond passing in win.
   checkForWin() {
     let letterLis = document.getElementById('phrase').firstElementChild
       .childNodes;
@@ -111,9 +125,7 @@ won
    */
 
   removeLife() {
-    //debugger;
     this.missed += 1;
-    console.log(this.missed);
     let livesRemaining = document.getElementById('scoreboard').firstElementChild
       .children;
     let currentLives = [];
@@ -138,11 +150,13 @@ won
 
   /**
    * Displays game over message
-   * @param {boolean} gameWon - Whether or not the user won the game
+   * Whether or not the user won the game
+   * Calls refreshGameBoard to prepare for the next game.
    */
   gameOver(result) {
     const gameOverBackground = document.getElementById('overlay');
     const gameOverMessage = document.getElementById('game-over-message');
+
     if (result === 'win') {
       gameOverMessage.textContent = 'Congratulations! You Win!';
       gameOverBackground.classList.add('win');
@@ -156,6 +170,7 @@ won
     }
     this.refreshGameBoard();
   }
+  //Sets game board back to ready to play state.
   refreshGameBoard() {
     const phraseDiv = document.getElementById('phrase').firstElementChild;
     const ulItems = phraseDiv.childNodes;
@@ -186,6 +201,11 @@ won
       lives[i].classList.add('tries');
       lives[i].innerHTML =
         '<img src="images/liveHeart.png" alt="Heart Icon" height="35" width="30">';
+    }
+    const hearts = document.querySelectorAll('.tries');
+    console.log(hearts);
+    for (let i = 0; i < hearts.length; i++) {
+      hearts[i].style.display = 'none';
     }
   }
 }

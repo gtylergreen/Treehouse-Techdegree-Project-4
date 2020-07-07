@@ -36,11 +36,6 @@ class Phrase {
     } else {
       return false;
     }
-    //   this.showMatchedLetter(value);
-    // } else {
-    //   game.removeLife();
-    // }
-    // game.checkForWin();
   }
 
   /**
@@ -56,9 +51,5 @@ class Phrase {
         item.classList.remove('hide');
       }
     });
-    // splitPhrase.for((letter) => {
-    //   return letter === eletter;
-    // });
-    // console.log(matchingLetters);
   }
 }
