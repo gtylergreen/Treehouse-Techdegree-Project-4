@@ -1,9 +1,11 @@
-//Game class with contructor to the specified criteria.
+//Game class with contructor to the specified criteria. Also added a keysPressed property to track keys that had been selected
+//using keyboard events.
 class Game {
   constructor() {
     this.missed = 0;
     this.phrases = this.createPhrases();
     this.activePhrase = null;
+    this.keysPressed = [];
   }
 
   /**
@@ -68,31 +70,51 @@ class Game {
   //the removeLife method to remove a life.
   handleInteraction(e) {
     let currentEventValue = '';
+    let currentKey = '';
     if (e.keyCode >= 65 && e.keyCode <= 90) {
       currentEventValue = String.fromCharCode(e.keyCode).toLowerCase();
+      console.log(currentEventValue);
       const allKeys = document.getElementsByClassName('key');
       console.log(allKeys);
-      for (let i = 0; i < allKeys.length; i++) {
-        if (allKeys[i].textContent === currentEventValue) {
-          console.log(allKeys[i]);
-
-          allKeys[i].disabled = true;
-          allKeys[i].classList.add('chosen');
+      //   debugger;
+      console.log(this.keysPressed);
+      for (let i = 0; i < this.keysPressed.length; i++) {
+        if (this.keysPressed[i] === currentEventValue) {
+          return false;
         }
       }
+      this.keysPressed.push(currentEventValue);
+      for (let i = 0; i < allKeys.length; i++) {
+        if (allKeys[i].textContent === currentEventValue) {
+          allKeys[i].disabled = true;
+          currentKey = allKeys[i];
+        }
+      }
+      console.log(currentKey);
     } else {
       currentEventValue = e.target.textContent;
       console.log(currentEventValue);
       e.target.disabled = true;
-      e.target.classList.add('chosen');
     }
 
     if (this.activePhrase.checkLetter(currentEventValue)) {
       this.activePhrase.showMatchedLetter(currentEventValue);
+      if (currentKey === '') {
+        e.target.classList.add('chosen');
+      } else {
+        currentKey.classList.add('chosen');
+      }
+      debugger;
       if (this.checkForWin()) {
         this.gameOver('win');
       }
     } else if (!this.activePhrase.checkLetter(currentEventValue)) {
+      if (currentKey === '') {
+        e.target.classList.add('wrong');
+      } else {
+        currentKey.classList.add('wrong');
+      }
+
       this.removeLife();
     }
   }
@@ -112,9 +134,12 @@ won
       if (letterLis[i].className === 'hide letter') {
         lettersRemaining += 1;
       }
+      if (lettersRemaining > 0) {
+        return false;
+      }
     }
     if (lettersRemaining === 0) {
-      this.gameOver('win');
+      return true;
     }
   }
 
@@ -160,12 +185,14 @@ won
     if (result === 'win') {
       gameOverMessage.textContent = 'Congratulations! You Win!';
       gameOverBackground.classList.add('win');
+      gameOverBackground.classList.remove('lose');
       gameOverBackground.style.display = 'block';
 
       console.log('You Win!');
     } else if (result == 'lose') {
       gameOverMessage.textContent = 'Sorry. You Lose.';
       gameOverBackground.classList.add('lose');
+      gameOverBackground.classList.remove('win');
       gameOverBackground.style.display = 'block';
     }
     this.refreshGameBoard();
@@ -182,16 +209,19 @@ won
     const firstRow = rows.children;
     //debugger;
     for (let i = 0; i < firstRow.length; i++) {
+      firstRow[i].classList.remove('wrong');
       firstRow[i].classList.remove('chosen');
       firstRow[i].removeAttribute('disabled');
     }
     const secondRow = rows.nextElementSibling.children;
     for (let i = 0; i < secondRow.length; i++) {
+      secondRow[i].classList.remove('wrong');
       secondRow[i].classList.remove('chosen');
       secondRow[i].removeAttribute('disabled');
     }
     const thirdRow = rows.nextElementSibling.nextElementSibling.children;
     for (let i = 0; i < thirdRow.length; i++) {
+      thirdRow[i].classList.remove('wrong');
       thirdRow[i].classList.remove('chosen');
       thirdRow[i].removeAttribute('disabled');
     }
