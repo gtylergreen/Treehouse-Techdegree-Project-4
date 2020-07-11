@@ -76,7 +76,6 @@ class Game {
       console.log(currentEventValue);
       const allKeys = document.getElementsByClassName('key');
       console.log(allKeys);
-      //   debugger;
       console.log(this.keysPressed);
       for (let i = 0; i < this.keysPressed.length; i++) {
         if (this.keysPressed[i] === currentEventValue) {
@@ -104,7 +103,7 @@ class Game {
       } else {
         currentKey.classList.add('chosen');
       }
-      debugger;
+
       if (this.checkForWin()) {
         this.gameOver('win');
       }
@@ -207,7 +206,6 @@ won
     }
     const rows = document.getElementById('qwerty').firstElementChild;
     const firstRow = rows.children;
-    //debugger;
     for (let i = 0; i < firstRow.length; i++) {
       firstRow[i].classList.remove('wrong');
       firstRow[i].classList.remove('chosen');
